@@ -48,7 +48,7 @@ def update_task(task_id: str, title: str, description: str | None = None, db: Se
     task.title = title
     if description:
         task.description = description
-    task.updated_at = datetime.now(datetime.timezone.utc)
+    task.updated_at = datetime.utcnow()
     db.commit()
     db.refresh(task)
     return {"message": f"Task {task_id} updated successfully"}
@@ -59,7 +59,7 @@ def complete_task(task_id: str, db: Session = Depends(get_db)):
     if not task:
         raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
     task.completed = True
-    task.updated_at = datetime.now(datetime.timezone.utc)
+    task.updated_at = datetime.utcnow()
     db.commit()
     db.refresh(task)
     return {"message": f"Task {task_id} completed successfully"}

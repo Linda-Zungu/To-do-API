@@ -12,8 +12,8 @@ class TaskDB(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=True)
     completed = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.now(datetime.timezone.utc))
-    updated_at = Column(DateTime, default=datetime.now(datetime.timezone.utc), onupdate=datetime.now(datetime.timezone.utc))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 # Pydantic model for API validation
 class Task(BaseModel):

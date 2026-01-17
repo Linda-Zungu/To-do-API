@@ -24,8 +24,7 @@ def get_tasks(db: Session = Depends(get_db)):
 @app.post("/tasks")
 def create_task(title: str, db: Session = Depends(get_db)):
     task_db = TaskDB(
-        title=title,
-        completed=False
+        title=title
     )
     db.add(task_db)
     db.commit()

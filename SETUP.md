@@ -61,6 +61,16 @@ Once the server is running, you can access:
 - **Interactive API Docs (Swagger)**: http://127.0.0.1:8000/docs
 - **Alternative API Docs (ReDoc)**: http://127.0.0.1:8000/redoc
 
+## Running Tests
+
+With the virtual environment activated, run:
+
+```bash
+pytest
+```
+
+The tests run against an in-memory SQLite database.
+
 ## Quick Start (All Steps Combined)
 
 If you're starting fresh:

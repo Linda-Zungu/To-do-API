@@ -166,3 +166,13 @@ curl -X DELETE "http://localhost:8000/tasks/{task_id}"
 - Each task is automatically assigned a unique UUID
 - Tasks include automatic timestamp tracking for creation and updates
 
+## Tests
+
+Run the test suite with:
+
+```bash
+pytest
+```
+
+The tests use an in-memory SQLite database and do not require a running
+Postgres instance.

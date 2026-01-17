@@ -10,6 +10,7 @@ class TaskDB(Base):
     
     id = Column(String, primary_key=True, default=str(uuid.uuid4()))
     title = Column(String, nullable=False)
+    description = Column(String, nullable=True)
     completed = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -18,6 +19,7 @@ class TaskDB(Base):
 class Task(BaseModel):
     id: str
     title: str
+    description: str | None = None
     completed: bool
     created_at: datetime
     updated_at: datetime

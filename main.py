@@ -15,24 +15,22 @@ def read_root():
     return {"message": "API is running..."}
 
 # Get all tasks
-@app.get("/tasks")
+@app.get("/get-tasks")
 def get_tasks(db: Session = Depends(get_db)):
     tasks = db.query(TaskDB).all()
     return [Task.model_validate(task) for task in tasks]
 
 # Create a task
-@app.post("/tasks")
-def create_task(title: str, db: Session = Depends(get_db)):
-    task_db = TaskDB(
-        title=title
-    )
-    db.add(task_db)
+@app.post("/create-task")
+def create_task(title: str, description: str | None = None, db: Session = Depends(get_db)):
+    task = TaskDB(title=title, description=description)
+    db.add(task)
     db.commit()
-    db.refresh(task_db)
-    return Task.model_validate(task_db)
+    db.refresh(task)
+    return Task.model_validate(task)
 
 # Delete a task by its ID
-@app.delete("/tasks/{task_id}")
+@app.delete("/delete-task/{task_id}")
 def delete_task(task_id: str, db: Session = Depends(get_db)):
     task = db.query(TaskDB).filter(TaskDB.id == task_id).first()
     if not task:
@@ -42,18 +40,20 @@ def delete_task(task_id: str, db: Session = Depends(get_db)):
     return {"message": f"Task {task_id} deleted successfully"}
 
 # Update a task by its ID
-@app.patch("/tasks/{task_id}")
-def update_task(task_id: str, title: str, db: Session = Depends(get_db)):
+@app.patch("/update-task/{task_id}")
+def update_task(task_id: str, title: str, description: str | None = None, db: Session = Depends(get_db)):
     task = db.query(TaskDB).filter(TaskDB.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
     task.title = title
+    if description:
+        task.description = description
     task.updated_at = datetime.utcnow()
     db.commit()
     db.refresh(task)
     return {"message": f"Task {task_id} updated successfully"}
 
-@app.patch("/tasks/{task_id}/complete")
+@app.patch("/complete-task/{task_id}")
 def complete_task(task_id: str, db: Session = Depends(get_db)):
     task = db.query(TaskDB).filter(TaskDB.id == task_id).first()
     if not task:

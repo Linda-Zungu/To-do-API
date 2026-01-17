@@ -1,18 +1,10 @@
 from fastapi import FastAPI, HTTPException
 import uvicorn
-from pydantic import BaseModel
 from uuid import uuid4
 from datetime import datetime
-
+from models import Task
 app = FastAPI()
 tasks = []
-
-class Task(BaseModel):
-    id: str
-    title: str
-    completed: bool
-    created_at: datetime
-    updated_at: datetime
 
 @app.get("/")
 def read_root():
@@ -26,15 +18,15 @@ def get_tasks():
 # Create a task
 @app.post("/tasks")
 def create_task(title: str):
-    task = {
-        "id": str(uuid4()),
-        "title": title,
-        "completed": False,
-        "created_at": datetime.now(),
-        "updated_at": datetime.now()
-    }
-    tasks.append(task)
-    return task
+    task = Task(
+        id=str(uuid4()),
+        title=title,
+        completed=False,
+        created_at=datetime.now(),
+        updated_at=datetime.now()
+    )
+    tasks.append(task.model_dump(mode="json"))
+    return task.model_dump(mode="json")
 
 # Delete a task by its ID
 @app.delete("/tasks/{task_id}")
